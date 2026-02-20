@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerControllerExam02 : MonoBehaviour
 {
-    public float speed;
+    public float speed = 10;
     public float zRange = 10;
     public GameObject projectilePrefab;
 
@@ -21,5 +21,20 @@ public class PlayerControllerExam02 : MonoBehaviour
     void Update()
     {
         verticalInput = moveAction.ReadValue<Vector2>().y;
+        transform.Translate(verticalInput * speed * Time.deltaTime * -Vector3.right);
+
+        if (transform.position.z < -zRange)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, -zRange);
+        }
+        if (transform.position.z > zRange)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, zRange);
+        }
+
+        if (shootAction.triggered)
+        {
+            Instantiate(projectilePrefab, transform.position, Quaternion.Euler(0, 90, 0));
+        }
     }
 }
